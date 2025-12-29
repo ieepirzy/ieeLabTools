@@ -1,0 +1,30 @@
+[project]
+name = "ieeLabTools"
+version = "0.1.2"
+description = "General symbolic + numeric uncertainty propagation, weighted linear regression"
+authors = [
+  { name = "Ilari Pirkkalainen", email = "iladevv0@gmail.com" }
+]
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "sympy",
+  "numpy"
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Intended Audience :: Education",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering",
+]
+
+[project.urls]
+Homepage = "https://github.com/ieepirzy/PhySiLight-Tools/tree/main/Packages/ieeLabTools"
+Documentation = "https://github.com/ieepirzy/PhySiLight-Tools/tree/main/Packages/ieeLabTools/Documentation.md"
+Source = "https://github.com/ieepirzy/PhySiLight-Tools/tree/main/Packages/ieeLabTools/ieeLabTools/core.py"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

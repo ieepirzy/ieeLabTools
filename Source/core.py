@@ -20,26 +20,34 @@ class Yvel():
         
         self.f = f
         
+        # Assign from user declared variables or find variables automatically
         if vars is not None:
             self.vars = vars
         else: 
-            self.vars = list(f.free_symbols)
-        
+            self.vars = sorted(f.free_symbols, key=lambda s: s.name)
+
+        #print(f"variables:{self.vars}") #debug print 
+
+        # Find partials with sp.diff, looping over the function with each variable 
         self.partials = []
         for v in self.vars:
             self.partials.append(sp.diff(self.f,v))
         
-        
+        #Creating sigmas for all variables
         self.sigmas = []
         for v in self.vars:
-            sigma = sp.Symbol(f"sigma_{v.name}")
+            sigma = sp.Symbol(f"σ{v.name}")
             self.sigmas.append(sigma)
-            
+        
+        # Construct symbolical sympy object
         self.symbolic_f = sp.sqrt(
             sum((partial*var)**2 for partial, var in zip(self.partials,self.sigmas))
             )
-                    
+
+        # Lambdify object to make it          
         self.fn = sp.lambdify([*self.vars, *self.sigmas], self.symbolic_f, "numpy")
+
+        # Number of variables for later
         self.k = len(self.vars)
         
     def symbolic(self):
@@ -57,27 +65,34 @@ class Yvel():
         
         Returns: numpy array length m
         """
+
+        # Assign into numpy arrays from input format
         values = np.array(values, dtype=float)
         sigmas = np.array(sigmas, dtype=float)
         
+        # Check correct shape
         if values.shape != sigmas.shape:
             raise ValueError("Measurement and uncertainty matrices must have same shape.")
         m, k = values.shape
         if k != self.k:
             raise ValueError(f"Expected {self.k} variables, got {k} columns.")
         
+        # transpose for correct internal representation
         vt = values.T
         st = sigmas.T
 
-        # build argument list
+        # build argument list, pairing value with deviation.
         args = [vt[i] for i in range(k)] + [st[i] for i in range(k)]
-
+        #print(f"arguments:{args}") #debug print
+        # pass args to lambidified sympy object, representing the function
         return self.fn(*args)
 
     def covariant_numeric(self,values,sigmas):
         return NotImplementedError
 
-class weightedLinregress():
+
+class WeightedLinregress():
+# Rework this to be stateless..
     def __init__(self, y_sigma,x,y):
         """
         Parameters
@@ -130,7 +145,7 @@ class weightedLinregress():
 
         return slope, intercept, slope_err, intercept_err
 
-class ortDistanceRegress():
+class OrtDistanceRegress():
     def __init__(self,x,y,x_sigma,y_sigma):
         
         """

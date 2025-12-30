@@ -12,7 +12,7 @@ import numpy as np
 #Example variables and function
 U, I = sp.symbols("U I")
 R = U/I
-calc = Yvel(R)
+calc = Yvel(R,vars=[U,I])
 
 U_vals = np.array([1,2,3,4,5,6])
 I_vals = np.array([6,5,4,3,2,1])
@@ -24,6 +24,10 @@ sigmas = np.column_stack([U_err, I_err])
 
 sigma_R = calc.numeric(values, sigmas)
 ``` 
+
+>⚠ Important ⚠:
+>The order of columns in `values` and `sigmas` must match the order of variables in `vars`.
+>If `vars` is omitted, variables are ordered lexicographically by symbol name.
 
 > ⚠ The current version uses the **non-covariant** general error propagation formula. Covariance-aware propagation is planned for a future release.
 
@@ -141,7 +145,7 @@ $$
 
 Internally, the method uses numpy for vectorized processing and does shape validation. 
 
-Example usage:
+Example usage for `numeric()` continuing with the same instance of the class as in the quickstart:
 ```python
 #lets assume the variables from earlier have some values and deviations:
 import numpy as np
@@ -174,4 +178,23 @@ print(deviation)
 
 ```
 
+Note: The known bug causing indeterministic ordering in Sympy's `free_symbols` method means that it is usually preferred to pass the variables explicitly, as how the script enforces deterministic ordering is by sorting the variables found by free_symbols lexographically, and as the user passes data to the `numeric()` method, must the ordering of the arrays corresponding to each measurement be in lexicographical order (the same order as the variables).
+
+> Note: The bug arrises from the way the set() function, used in the `free_symbols` method interacts with pythons HASHSEED.
+> HASHSEED being randomized for DoS-attack prevention. It is then assumed that if order matters, it is specified, hence a strong recommendation to pass the `vars` as a parameter directly.
+
+Example of indeterministic behaviour:
+
+```python
+
+# DON'T DO THIS - order may vary between runs:
+calc = Yvel(R)  # vars detected as [I, U] or [U, I] unpredictably
+values = np.column_stack([U_vals, I_vals])  # assumes [U, I]
+# ❌ Mismatch possible!
+
+# DO THIS - explicit and deterministic:
+calc = Yvel(R, vars=[U, I])  # ✅ Order guaranteed
+values = np.column_stack([U_vals, I_vals])
+
+```
 

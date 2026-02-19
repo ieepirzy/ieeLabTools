@@ -1,5 +1,10 @@
 # ieeLabTools
 
+
+[![PyPI](https://img.shields.io/pypi/v/ieeLabTools)](https://pypi.org/project/ieeLabTools/)
+![Python Versions](https://img.shields.io/pypi/pyversions/ieeLabTools)
+![License](https://img.shields.io/pypi/l/ieeLabTools)
+
 Tools for **laboratory data analysis**, including:
 
 - **General symbolic & numeric uncertainty propagation**

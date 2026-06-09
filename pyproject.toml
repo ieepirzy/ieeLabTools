@@ -23,7 +23,10 @@ classifiers = [
 [project.urls]
 Homepage = "https://github.com/ieepirzy/ieeLabTools"
 Documentation = "https://github.com/ieepirzy/ieeLabTools/blob/main/Docs/Documentation.md"
-Source = "https://github.com/ieepirzy/ieeLabTools/blob/main/Source/core.py"
+Source = "https://github.com/ieepirzy/ieeLabTools/blob/main/ieeLabTools/core.py"
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0", "pytest-cov"]
 
 [build-system]
 requires = ["hatchling"]

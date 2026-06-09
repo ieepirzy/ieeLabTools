@@ -14,7 +14,7 @@ from .core import (
 
 __all__ = [
     "Yvel",
-    "WeightedLinearRegression",
+    "WeightedLinregress",
 ]
 
 __version__ = "0.1.3"

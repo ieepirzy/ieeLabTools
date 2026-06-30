@@ -1,6 +1,6 @@
 [project]
 name = "ieeLabTools"
-version = "0.1.3"
+version = "0.1.4"
 description = "General linear symbolic + numeric uncertainty propagation, weighted linear regression"
 authors = [
   { name = "ieepirzy", email = "nervy_colder_1m@icloud.com" }
